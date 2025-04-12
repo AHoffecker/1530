@@ -1,3 +1,5 @@
+# CS1530 Team Project - EatNow
+
 ## 🧪 Local Setup Instructions
 
 ### 📦 1. Clone the Repository
