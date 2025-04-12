@@ -1,10 +1,48 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map</title>
-</head>
-<body>
-    
-</body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pitt Dining Locations Map</title>
+    <style>
+      /* Style the map container */
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Pitt Dining Locations</h3>
+    <div id="map"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+
+
+    <script>
+      function initMap() {
+        const center = { lat: 40.444439, lng: -79.961219 };
+
+
+        // Create map
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 12,
+          center: center,
+        });
+
+        // Example markers
+        const locations = [
+          { lat: 40.443752790425826, lng: -79.96208623482627, title: "Chick fil A, Peterson Events Center Food Court" },
+          { lat: 40.44139493546059, lng: -79.95455533156277, title: "Einstein Bros Bagels, Posvar Hall" },
+        ];
+
+        // Add markers to the map
+        locations.forEach((loc) => {
+          new google.maps.Marker({
+            position: { lat: loc.lat, lng: loc.lng },
+            map: map,
+            title: loc.title,
+          });
+        });
+      }
+    </script>
+  </body>
 </html>
