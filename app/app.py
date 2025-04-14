@@ -10,3 +10,7 @@ def home():
 @app.route('/map_page')
 def map_page():
     return render_template('map.html', google_maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"))
+
+@app.route('/review')
+def review():
+    return render_template('review.html')
