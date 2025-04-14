@@ -6,11 +6,35 @@
   <body>
     <h3>Report a Wait Time or Leave a Review</h3>
     <form>
+      <label for="restaurant">Select a Restaurant:</label><br />
+      <select id="restaurant" name="restaurant">
+        <option value="">--Choose a restaurant--</option>
+        <option value="auntiAnnes">Auntie Anne's</option>
+        <option value="burritoBowl">Burrito Bowl</option>
+        <option value="cafe1923">Cafe 1923</option>
+        <option value="campusCoffeeTeaCoSutherland">Campus Coffee & Tea Co - Sutherland</option>
+        <option value="campusCoffeeTeaCoTowers">Campus Coffee & Tea Co - Towers</option>
+        <option value="cathedralSushi">Cathedral Sushi</option>
+        <option value="chickFilA">Chick-fil-A</option>
+        <option value="crEATe">CrEATe</option>
+        <option value="ftPittSubs">Ft. Pitt Subs</option>
+        <option value="paTacoCo">PA Taco Co.</option>
+        <option value="pomHoney">Pom & Honey</option>
+        <option value="shakeSmart">Shake Smart</option>
+        <option value="steelCityKitchen">Steel City Kitchen</option>
+        <option value="theDelicatessen">The Delicatessen</option>
+        <option value="theEatery">The Eatery</option>
+        <option value="thePerch">The Perch</option>
+        <option value="theRoost">The Roost</option>
+        <option value="trueBurger">True Burger</option>
+        <option value="wickedPie">Wicked Pie</option>
+      </select><br /><br />
+
       <label for="waitTime">Wait Time (Minutes):</label><br />
-      <input type="number" id="waitTime" name="waitTime" /><br />
+      <input type="number" id="waitTime" name="waitTime" /><br /><br />
 
       <label for="review">Leave a Review:</label><br />
-      <textarea id="review" name="review" rows="5" cols="60"></textarea><br />
+      <textarea id="review" name="review" rows="5" cols="60"></textarea><br /><br />
 
       <button type="submit">Submit</button>
     </form>
