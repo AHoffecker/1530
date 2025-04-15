@@ -20,7 +20,6 @@
       function initMap() {
         const center = { lat: 40.44273369636497, lng: -79.95804594870202 };
 
-        // Create map
         const map = new google.maps.Map(document.getElementById("map"), {
           zoom: 16,
           center: center,
@@ -60,23 +59,74 @@
           { lat: 40.44343116587647, lng: -79.95481804891322, title: "True Burger" },
           { lat: 40.44343116587647, lng: -79.95481804891322, title: "Wicked Pie" },
         ];
-
+        
+        let activeInfoWindow = null;
         locations.forEach((loc) => {
           const marker = new google.maps.Marker({
             position: { lat: loc.lat, lng: loc.lng },
             map: map,
             title: loc.title,
           });
-
+          
+          const encodedName = encodeURIComponent(loc.title)
           const infoWindow = new google.maps.InfoWindow({
-            content: `<div><strong>${loc.title}</strong></div>`
+            content: `
+              <div>
+                <strong>${loc.title}</strong><br>
+                <button style="margin-top: 5px; padding: 5px 10px; cursor: pointer;"
+                onclick="window.location.href='/locations/${encodedName}'">Details</button>
+              </div>
+            `
           });
 
           marker.addListener("click", () => {
+            if (activeInfoWindow) {
+              activeInfoWindow.close();
+            }
+
             infoWindow.open(map, marker);
+            activeInfoWindow = infoWindow;
           });
         });
       }
     </script>
+
+    <div id="dining_locations_list">
+      <ul>
+        <li><a href="/locations/Auntie%20Anne%27s">Auntie Anne's</a></li>
+        <li><a href="/locations/Bottom%20Line%20Bistro">Bottom Line Bistro</a></li>
+        <li><a href="/locations/Bunsen%20Brewer">Bunsen Brewer</a></li>
+        <li><a href="/locations/Burrito%20Bowl">Burrito Bowl</a></li>
+        <li><a href="/locations/Cafe%201787">Cafe 1787</a></li>
+        <li><a href="/locations/Cafe%201923">Cafe 1923</a></li>
+        <li><a href="/locations/Cafe%20Victoria">Cafe Victoria</a></li>
+        <li><a href="/locations/Campus%20Coffee%20%26%20Tea%20Co%20-%20Public%20Health">Campus Coffee & Tea Co - Public Health</a></li>
+        <li><a href="/locations/Campus%20Coffee%20%26%20Tea%20Co%20-%20Sutherland">Campus Coffee & Tea Co - Sutherland</a></li>
+        <li><a href="/locations/Campus%20Coffee%20%26%20Tea%20Co%20-%20Towers">Campus Coffee & Tea Co - Towers</a></li>
+        <li><a href="/locations/Cathedral%20Sushi">Cathedral Sushi</a></li>
+        <li><a href="/locations/Chick-fil-A">Chick-fil-A</a></li>
+        <li><a href="/locations/CrEATe">CrEATe</a></li>
+        <li><a href="/locations/Einstein%20Bros.%20Bagels%20-%20Benedum">Einstein Bros. Bagels - Benedum</a></li>
+        <li><a href="/locations/Einstein%20Bros.%20Bagels%20-%20Posvar">Einstein Bros. Bagels - Posvar</a></li>
+        <li><a href="/locations/Ethel%27s">Ethel's</a></li>
+        <li><a href="/locations/Forbes%20Street%20Market">Forbes Street Market</a></li>
+        <li><a href="/locations/Ft.%20Pitt%20Subs">Ft. Pitt Subs</a></li>
+        <li><a href="/locations/Panera%20Bread">Panera Bread</a></li>
+        <li><a href="/locations/PA%20Taco%20Co.">PA Taco Co.</a></li>
+        <li><a href="/locations/Plate%20to%20Plate%20at%20Sutherland%20Market">Plate to Plate at Sutherland Market</a></li>
+        <li><a href="/locations/Pom%20%26%20Honey">Pom & Honey</a></li>
+        <li><a href="/locations/RxPresso">RxPresso</a></li>
+        <li><a href="/locations/Shake%20Smart">Shake Smart</a></li>
+        <li><a href="/locations/Sidebar%20Cafe">Sidebar Cafe</a></li>
+        <li><a href="/locations/Smokeland%20BBQ%20Food%20Truck">Smokeland BBQ Food Truck</a></li>
+        <li><a href="/locations/Steel%20City%20Kitchen">Steel City Kitchen</a></li>
+        <li><a href="/locations/The%20Market%20at%20Sutherland">The Market at Sutherland</a></li>
+        <li><a href="/locations/The%20Market%20at%20Towers">The Market at Towers</a></li>
+        <li><a href="/locations/The%20Roost">The Roost</a></li>
+        <li><a href="/locations/True%20Burger">True Burger</a></li>
+        <li><a href="/locations/Wicked%20Pie">Wicked Pie</a></li>
+      </ul>
+    </div>
+
   </body>
 </html>

@@ -18,3 +18,7 @@ def view_wait():
 @main.route('/review')
 def review():
     return render_template('review.html')
+
+@main.route('/locations/<name>')
+def location_details(name):
+    return render_template("details.html", name=name)
