@@ -1,7 +1,13 @@
 from flask import Flask, render_template, request
 import os
+from models import db, Restaurant, Review
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models.db'
+
+# Bind the db to the app
+db.init_app(app)
 
 @app.route('/')
 def home():
