@@ -17,9 +17,9 @@ def home():
 def map_page():
     return render_template('map.html', google_maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"))
 
-@app.route('/view_wait')
-def view_wait():
-    return render_template('view_wait.html')
+@app.route('/search')
+def search():
+    return render_template('search.html')
 
 @app.route('/review')
 def review():
