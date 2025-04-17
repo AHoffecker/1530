@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-#TEST COMMENT
+
 db = SQLAlchemy()
 
 class Restaurant(db.Model):
