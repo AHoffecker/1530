@@ -20,7 +20,7 @@ def map_page():
 @app.route('/view_wait')
 def view_wait():
     return render_template('view_wait.html')
-    
-    @app.route('/review')
+
+@app.route('/review')
 def review():
     return render_template('review.html')
