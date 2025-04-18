@@ -7,10 +7,10 @@
 
 <body>
     <h3>Search Restaurants by Wait Time</h3>
-        <form>
-            <label for="waitTime">Select a Wait Time:</label>
+    <form>
+        <label for="waitTime">Select a Wait Time:</label>
 
-            <select name="time" id="time">
+        <select name="time" id="time">
             <option value="5m">5 minutes</option>
             <option value="10m">10 minutes</option>
             <option value="15m">15 minutes</option>
@@ -18,11 +18,37 @@
             <option value="30m">30 minutes</option>
             <option value="45m">45 minutes</option>
             <option value="60m">60 minutes</option>
-            </select>
-            </br></br>
-            <button type="button" id="submitButton">Search for Restaurants</button>
+            <option value="all">All Restaurants</option>
+        </select>
+        </br></br>
+        <button type="button" id="submitButton">Search for Restaurants</button>
 
-        </form>
+    </form>
 </body>
 
 </html>
+
+<script>
+    // Store input values in local storage
+    function storeInputValues() {
+        var time = document.getElementById("time");
+
+        localStorage.setItem("time", time.value);
+    }
+
+    // Set input values from local storage
+    function setInputValues() {
+        var time = document.getElementById("time");
+
+        var storedTime = localStorage.getItem("time") || "";
+
+        time.value = storedTime;
+    }
+
+    // Call the setInputValues function when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        setInputValues();
+    });
+
+
+</script>
