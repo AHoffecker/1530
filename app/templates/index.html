@@ -13,7 +13,7 @@
     body {
       font-size: 24px;
       color: #003594;
-      background-color: #fff700;
+      /* background-color: #fff700; */
     }
   </style>
   <title>EatNow</title>
@@ -21,17 +21,9 @@
 
 <body>
   <header>EatNow</header>
-  <ul>
-    <li>
-      <a href="{{ url_for('map_page') }}">Map</a>
-    </li>
-    <li>
-      <a href="{{ url_for('search') }}">View Wait Times</a>
-    </li>
-    <li>
-      <a href="{{ url_for('review') }}">Report Wait Time or Leave a Review</a>
-    </li>
-  </ul>
+      <a href="{{ url_for('map_page') }}">Map</a></br>
+      <a href="{{ url_for('search') }}">View Wait Times</a></br>
+      <a href="{{ url_for('review') }}">Report Wait Time or Leave a Review</a></br>
 </body>
 
 </html>
