@@ -10,8 +10,8 @@ class Restaurant(db.Model):
     emailAddress = db.Column(db.String(120), unique=True, nullable=False)
     address = db.Column(db.String(200), nullable=False)
     menu = db.Column(db.Text)
-    openTime = db.Column(db.models.TimeField(_(""), auto_now=False, auto_now_add=False))
-    closeTime = db.Column(db.models.TimeField(_(""), auto_now=False, auto_now_add=False))
+    openTime = db.Column(db.Time, nullable=False)  # corrected
+    closeTime = db.Column(db.Time, nullable=False)  # corrected
     paymentMethods = db.Column(db.Text)
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
@@ -20,7 +20,7 @@ class Restaurant(db.Model):
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
-    rating = db.Column(db.models.SmallIntegerField(_("")))
+    rating = db.Column(db.SmallInteger, nullable=False)  # corrected
     writtenReview = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     restaurant = db.relationship('Restaurant', backref=db.backref('reviews', lazy=True))
@@ -30,7 +30,8 @@ class WaitTime(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
     lengthOfWait = db.Column(db.Integer, nullable=False)
-    orderTime = db.column(db.timestamp, default=datetime.utcnow)
-    receivedTime = db.column(db.timestamp, default=datetime.utcnow)
-    timestamp = db.Column(db.timestamp, default=datetime.utcnow)
+    orderTime = db.Column(db.Time, default=datetime.utcnow)  # corrected
+    receivedTime = db.Column(db.Time, default=datetime.utcnow)  # corrected
+    timestamp = db.Column(db.Time, default=datetime.utcnow)  # corrected
+
     
