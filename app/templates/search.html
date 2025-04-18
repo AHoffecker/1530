@@ -22,8 +22,7 @@
             <option value="all">Any</option>
         </select>
         </br></br>
-        <button type="button" id="submitButton">Submit</button>
-
+        <button type="submit">Submit</button>
     </form>
 </body>
 
@@ -33,16 +32,13 @@
     // Store input values in local storage
     function storeInputValues() {
         var time = document.getElementById("time");
-
         localStorage.setItem("time", time.value);
     }
 
     // Set input values from local storage
     function setInputValues() {
         var time = document.getElementById("time");
-
         var storedTime = localStorage.getItem("time") || "";
-
         time.value = storedTime;
     }
 
