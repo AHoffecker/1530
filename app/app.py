@@ -60,7 +60,7 @@ def search():
 
 @app.route('/search_results', methods=['POST'])
 def search_results():
-    max_wait = request.form.get('waitTime', type=int)
+    max_wait = request.form.get('time', type=str)
 
     if max_wait is not None:
         # Calculate the average wait time for each restaurant
