@@ -11,7 +11,7 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('map.html')
 
 @app.route('/map_page')
 def map_page():

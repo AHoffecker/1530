@@ -1,82 +1,158 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Pitt Dining Locations Map</title>
-    <style>
-      #map {
-        height: 500px;
-        width: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <h3>Pitt Dining Locations</h3>
-    <div id="map"></div>
+{% extends "index.html" %} {% block content %}
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+<h2 class='my-background-secondary'>Pitt Dining Locations</h2>
+<div id="map"></div>
 
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap"
+  async
+  defer
+></script>
 
-    <script>
-      function initMap() {
-        const center = { lat: 40.44273369636497, lng: -79.95804594870202 };
+<script>
+  function initMap() {
+    const center = { lat: 40.44273369636497, lng: -79.95804594870202 };
 
-        // Create map
-        const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 16,
-          center: center,
-        });
+    // Create map
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 16,
+      center: center,
+    });
 
-        const locations = [
-          { lat: 40.443752790425826, lng: -79.96208623482627, title: "Auntie Anne's" },
-          { lat: 40.44077114410371,  lng: -79.953257164039, title: "Bottom Line Bistro" },
-          { lat: 40.445714494402594, lng: -79.95787399228372, title: "Bunsen Brewer" },
-          { lat: 40.444025831816056, lng: -79.96186407321626, title: "Burrito Bowl" },
-          { lat: 40.44532648897956, lng: -79.95397568368409, title: "Cafe 1787" },
-          { lat: 40.44417932547673, lng: -79.95679622969803, title: "Cafe 1923" },
-          { lat: 40.4411934585259, lng: -79.96089613196948, title: "Cafe Victoria" },
-          { lat: 40.4425722737583, lng: -79.9580524263622, title: "Campus Coffee & Tea Co - Public Health" },
-          { lat: 40.445830289009756, lng: -79.96262984380247, title: "Campus Coffee & Tea Co - Sutherland" },
-          { lat: 40.44256871674983, lng: -79.95667011422988, title: "Campus Coffee & Tea Co - Towers" },
-          { lat: 40.44412519971398, lng: -79.95333746952493, title: "Cathedral Sushi" },
-          { lat: 40.44376352830237, lng: -79.96207194441983, title: "Chick-fil-A" },
-          { lat: 40.44343116587647, lng: -79.95481804891322, title: "CrEATe" },
-          { lat: 40.44403538398173, lng: -79.95809570831429, title: "Einstein Bros. Bagels - Benedum" },
-          { lat: 40.44129186349507, lng: -79.95458201451143, title: "Einstein Bros. Bagels - Posvar" },
-          { lat: 40.44232273810616, lng: -79.95460749548288, title: "Ethel's" },
-          { lat: 40.442929007481005, lng: -79.95535046738529, title: "Forbes Street Market" },
-          { lat: 40.44343116587647, lng: -79.95481804891322, title: "Ft. Pitt Subs" },
-          { lat: 40.44249783264355, lng: -79.96172878471405, title: "Panera Bread" },
-          { lat: 40.44343116587647, lng: -79.95481804891322, title: "PA Taco Co." },
-          { lat: 40.4458111817928, lng: -79.96254602698215, title: "Plate to Plate at Sutherland Market" },
-          { lat: 40.44412519971398, lng: -79.95333746952493, title: "Pom & Honey" },
-          { lat: 40.442532297298776, lng: -79.96275951682028, title: "RxPresso" },
-          { lat: 40.443635948402374, lng: -79.96226506347347, title: "Shake Smart" },
-          { lat: 40.441759655540956, lng: -79.95566909728359, title: "Sidebar Cafe" },
-          { lat: 40.4425059898016, lng: -79.95660442483963, title: "Smokeland BBQ Food Truck" },
-          { lat: 40.44407584287575, lng: -79.96229859108021, title: "Steel City Kitchen" },
-          { lat: 40.445840495077476, lng: -79.96259229287533, title: "The Market at Sutherland" },
-          { lat: 40.442507110849505, lng: -79.95646612755588, title: "The Market at Towers" },
-          { lat: 40.44412519971398, lng: -79.95333746952493, title: "The Roost" },
-          { lat: 40.44343116587647, lng: -79.95481804891322, title: "True Burger" },
-          { lat: 40.44343116587647, lng: -79.95481804891322, title: "Wicked Pie" },
-        ];
+    const locations = [
+      {
+        lat: 40.443752790425826,
+        lng: -79.96208623482627,
+        title: "Auntie Anne's",
+      },
+      {
+        lat: 40.44077114410371,
+        lng: -79.953257164039,
+        title: "Bottom Line Bistro",
+      },
+      {
+        lat: 40.445714494402594,
+        lng: -79.95787399228372,
+        title: "Bunsen Brewer",
+      },
+      {
+        lat: 40.444025831816056,
+        lng: -79.96186407321626,
+        title: "Burrito Bowl",
+      },
+      { lat: 40.44532648897956, lng: -79.95397568368409, title: "Cafe 1787" },
+      { lat: 40.44417932547673, lng: -79.95679622969803, title: "Cafe 1923" },
+      {
+        lat: 40.4411934585259,
+        lng: -79.96089613196948,
+        title: "Cafe Victoria",
+      },
+      {
+        lat: 40.4425722737583,
+        lng: -79.9580524263622,
+        title: "Campus Coffee & Tea Co - Public Health",
+      },
+      {
+        lat: 40.445830289009756,
+        lng: -79.96262984380247,
+        title: "Campus Coffee & Tea Co - Sutherland",
+      },
+      {
+        lat: 40.44256871674983,
+        lng: -79.95667011422988,
+        title: "Campus Coffee & Tea Co - Towers",
+      },
+      {
+        lat: 40.44412519971398,
+        lng: -79.95333746952493,
+        title: "Cathedral Sushi",
+      },
+      { lat: 40.44376352830237, lng: -79.96207194441983, title: "Chick-fil-A" },
+      { lat: 40.44343116587647, lng: -79.95481804891322, title: "CrEATe" },
+      {
+        lat: 40.44403538398173,
+        lng: -79.95809570831429,
+        title: "Einstein Bros. Bagels - Benedum",
+      },
+      {
+        lat: 40.44129186349507,
+        lng: -79.95458201451143,
+        title: "Einstein Bros. Bagels - Posvar",
+      },
+      { lat: 40.44232273810616, lng: -79.95460749548288, title: "Ethel's" },
+      {
+        lat: 40.442929007481005,
+        lng: -79.95535046738529,
+        title: "Forbes Street Market",
+      },
+      {
+        lat: 40.44343116587647,
+        lng: -79.95481804891322,
+        title: "Ft. Pitt Subs",
+      },
+      {
+        lat: 40.44249783264355,
+        lng: -79.96172878471405,
+        title: "Panera Bread",
+      },
+      { lat: 40.44343116587647, lng: -79.95481804891322, title: "PA Taco Co." },
+      {
+        lat: 40.4458111817928,
+        lng: -79.96254602698215,
+        title: "Plate to Plate at Sutherland Market",
+      },
+      { lat: 40.44412519971398, lng: -79.95333746952493, title: "Pom & Honey" },
+      { lat: 40.442532297298776, lng: -79.96275951682028, title: "RxPresso" },
+      {
+        lat: 40.443635948402374,
+        lng: -79.96226506347347,
+        title: "Shake Smart",
+      },
+      {
+        lat: 40.441759655540956,
+        lng: -79.95566909728359,
+        title: "Sidebar Cafe",
+      },
+      {
+        lat: 40.4425059898016,
+        lng: -79.95660442483963,
+        title: "Smokeland BBQ Food Truck",
+      },
+      {
+        lat: 40.44407584287575,
+        lng: -79.96229859108021,
+        title: "Steel City Kitchen",
+      },
+      {
+        lat: 40.445840495077476,
+        lng: -79.96259229287533,
+        title: "The Market at Sutherland",
+      },
+      {
+        lat: 40.442507110849505,
+        lng: -79.95646612755588,
+        title: "The Market at Towers",
+      },
+      { lat: 40.44412519971398, lng: -79.95333746952493, title: "The Roost" },
+      { lat: 40.44343116587647, lng: -79.95481804891322, title: "True Burger" },
+      { lat: 40.44343116587647, lng: -79.95481804891322, title: "Wicked Pie" },
+    ];
 
-        locations.forEach((loc) => {
-          const marker = new google.maps.Marker({
-            position: { lat: loc.lat, lng: loc.lng },
-            map: map,
-            title: loc.title,
-          });
+    locations.forEach((loc) => {
+      const marker = new google.maps.Marker({
+        position: { lat: loc.lat, lng: loc.lng },
+        map: map,
+        title: loc.title,
+      });
 
-          const infoWindow = new google.maps.InfoWindow({
-            content: `<div><strong>${loc.title}</strong></div>`
-          });
+      const infoWindow = new google.maps.InfoWindow({
+        content: `<div><strong>${loc.title}</strong></div>`,
+      });
 
-          marker.addListener("click", () => {
-            infoWindow.open(map, marker);
-          });
-        });
-      }
-    </script>
-  </body>
-</html>
+      marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+      });
+    });
+  }
+</script>
+{% endblock %}

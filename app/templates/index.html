@@ -1,29 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EatNow</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css"
+    />
+    <style>
+      .my-background-primary {
+        background-color: #ffffff;
+      }
+      .my-background-secondary {
+        background-color: #1c2957;
+      }
+      .color-primary {
+        color: #cdb87d;
+      }
+      .color-secondary {
+        color: #76d6c6;
+      }
+      #map {
+        height: 700px;
+        width: 100%;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    header {
-      font-size: 60px;
-      font-weight: bold;
-      text-align: center;
-    }
-    body {
-      font-size: 24px;
-      color: #003594;
-      /* background-color: #fff700; */
-    }
-  </style>
-  <title>EatNow</title>
-</head>
+  <body>
+    <section class="hero is-fullheight my-background-primary">
+      <div class="hero-head my-background-secondary color-secondary">
+        <nav class="navbar">
+          <div class="container">
+            <div id="navbarBrand" class="navbar-brand">
+              <img
+                src="{{ url_for('static', filename='EatNowLogo.png') }}"
+                width="128"
+                height="64"
+              />
+            </div>
+            <div id="navbarStart" class="navbar-start">
+              
+            </div>
+            <div id="navbarMenuHeroA" class="navbar-menu">
+              <div class="navbar-end">
+                <a
+                  href="{{ url_for('map_page') }}"
+                  class="navbar-item color-primary underline"
+                >
+                  Map
+                </a>
+                <a
+                  href="{{ url_for('search') }}"
+                  class="navbar-item color-primary underline"
+                >
+                  Search
+                </a>
+                <a
+                  href="{{ url_for('review') }}"
+                  class="navbar-item color-primary underline"
+                >
+                  Review
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
 
-<body>
-  <header>EatNow</header>
-      <a href="{{ url_for('map_page') }}">Map</a></br>
-      <a href="{{ url_for('search') }}">View Wait Times</a></br>
-      <a href="{{ url_for('review') }}">Report Wait Time or Leave a Review</a></br>
-</body>
-
+      <div class="hero-body my-background-primary is-medium has-carousel">
+        <div class="container has-text-centered my-background-primary">
+          {% block content %} {% endblock %}
+        </div>
+      </div>
+    </section>
+  </body>
 </html>
