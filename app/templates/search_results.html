@@ -1,14 +1,15 @@
+{% extends "index.html" %} {% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Search Results</title>
 </head>
-<body>
-    <h3>Search Restaurants by Wait Time</h3>
+<div class = "block my-background-secondary">
+    <h1 class='color-primary'>Search Restaurants by Wait Time</h1>
 
     <form method="POST" action="/search_results">
 
-        <label for="maxWaitTime">Select a Wait Time:</br>
+        <label for="maxWaitTime" class='color-primary'>Select a Wait Time:</br>
 
             <select name="time" id="time">
                 <option value="">--Select Time--</option>
@@ -21,21 +22,21 @@
                 <option value="60">60 minutes</option>
                 <option value="all">Any</option>
             </select></br></br>
-            <button type="submit">Submit</button>
-    </form></br>
+            <button type="submit" class='button color-primary'>Submit</button>
+    </form></br></br>
 
-    <h3>Search Results</h3>
+    <h1 class='color-primary'>Search Results</h1>
 
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% elif restaurants %}
-        <h3>Restaurants with an Average Wait Time 
+        <h1 class='color-primary'>Restaurants with an Average Wait Time 
         {% if selected_time == 'all' %}
             (Any):
         {% else %}
             of {{ selected_time }} or less:
         {% endif %}
-        </h3>
+        </h1>
         <ul>
             {% for restaurant_name, avg_wait in restaurants %}
                 <li>{{ restaurant_name }}: {{ avg_wait }} minutes</li>
@@ -45,5 +46,6 @@
         <p>No restaurants found.</p>
     {% endif %}
 
-</body>
+    </div>
 </html>
+{% endblock %}
