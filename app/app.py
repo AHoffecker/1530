@@ -1,13 +1,50 @@
 from flask import Flask, render_template, request
 import os
-from models import db, Restaurant, Review
+from models import db, Restaurant, Review, WaitTime
+from sqlalchemy import func
 
+# Initialize Flask app
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models.db'
+# Configure the database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models.db'  # Adjust for your DB URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Optional, to suppress a warning
 
 # Bind the db to the app
 db.init_app(app)
+
+# Function to add the list of restaurants
+def add_restaurants():
+    restaurants = [
+        "Auntie Anne's", "Burrito Bowl", "Cafe 1923", "Campus Coffee & Tea Co - Sutherland", 
+        "Campus Coffee & Tea Co - Towers", "Cathedral Sushi", "Chick-fil-A", "CrEATe", 
+        "Ft. Pitt Subs", "PA Taco Co.", "Pom & Honey", "Shake Smart", "Steel City Kitchen", 
+        "The Delicatessen", "The Eatery", "The Perch", "The Roost", "True Burger", "Wicked Pie"
+    ]
+    
+    for name in restaurants:
+        # Check if the restaurant already exists to avoid duplicates
+        if not Restaurant.query.filter_by(name=name).first():
+            restaurant = Restaurant(
+                name=name,
+                phoneNumber=None,
+                emailAddress=None,
+                address=None,
+                menu=None,
+                openTime=None,
+                closeTime=None,
+                paymentMethods=None,
+                username=None,
+                password=None
+            )
+            db.session.add(restaurant)
+    
+    db.session.commit()
+
+# Create tables if they do not exist (done once when the app starts up)
+with app.app_context():
+    db.create_all()  # Creates the tables in the database if they do not exist
+    add_restaurants()  # Add the list of restaurants to the database
 
 @app.route('/')
 def home():
@@ -49,3 +86,6 @@ def search_results():
 @app.route('/review')
 def review():
     return render_template('review.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
