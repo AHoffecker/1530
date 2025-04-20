@@ -31,7 +31,7 @@
         <p style="color: red;">{{ error }}</p>
     {% elif max_wait == '' %}
         <p>No restaurants found.</p>
-    {% elif restaurants == None %}
+    {% elif restaurants %}
         <h1 class='color-primary'>Restaurants with an Average Wait Time 
         {% if max_wait == 'any' %}
             (Any):

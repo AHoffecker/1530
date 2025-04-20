@@ -92,7 +92,7 @@ def search_results():
                 avg_wait_times, Restaurant.id == avg_wait_times.c.restaurant_id
             )
 
-        return render_template('search_results.html', max_wait=time, restaurants=restaurants_with_avg_wait)
+        return render_template('search_results.html', max_wait=max_wait, restaurants=restaurants_with_avg_wait)
     else:
         return render_template('search_results.html', error="Please enter a valid maximum wait time.")
 
