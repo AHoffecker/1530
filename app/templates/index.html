@@ -35,14 +35,16 @@
         <nav class="navbar">
           <div class="container">
             <div id="navbarBrand" class="navbar-brand">
-              <img
+              <a
+                  href="{{ url_for('map_page') }}"
+                ><img
                 src="{{ url_for('static', filename='EatNowLogo.png') }}"
                 width="128"
                 height="64"
-              />
+              /></a>
             </div>
             <div id="navbarStart" class="navbar-start">
-              
+
             </div>
             <div id="navbarMenuHeroA" class="navbar-menu">
               <div class="navbar-end">
