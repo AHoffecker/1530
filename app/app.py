@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request
 import os
+import datetime
 from models import db, Restaurant, Review, WaitTime
-from sqlalchemy import func
+from sqlalchemy import func, asc
+import random
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -41,10 +43,25 @@ def add_restaurants():
 
     db.session.commit()
 
+def add_wait(r_id, lengthOfWait):
+    waitTime = WaitTime(
+        restaurant_id = r_id,
+        lengthOfWait = lengthOfWait,
+        orderTime = (datetime.datetime.now()-datetime.timedelta(seconds = lengthOfWait*60)).time(),
+        receivedTime = datetime.datetime.now().time(),
+        timestamp = datetime.datetime.now().time()
+    )
+    db.session.add(waitTime)
+    db.session.commit()
+
 # Create tables if they do not exist (done once when the app starts up)
 with app.app_context():
     db.create_all()  # Creates the tables in the database if they do not exist
     add_restaurants()  # Add the list of restaurants to the database
+    # for _ in range(25): # Adds random fake data
+    #     id = random.randint(0,20)
+    #     wait = random.randint(0,100)
+    #     add_wait(id, wait)
 
 @app.route('/')
 def home():
@@ -60,15 +77,14 @@ def search():
 
 @app.route('/search_results', methods=['POST'])
 def search_results():
-    time = request.form.get('time', type=str)
+    time = request.form.get('time', type=str) # get time from search or search_results form
     max_wait = ''
-    print(time)
-    try:
+
+    try: # turn time into int
         max_wait = int(time)
-    except:
+    except: # all wait times
         if time == "any":
             max_wait = "any"
-
 
     if max_wait is not None:
         # Calculate the average wait time for each restaurant
@@ -81,11 +97,12 @@ def search_results():
         if max_wait != "any":
             restaurants_with_avg_wait = db.session.query(
                 Restaurant.name,
-                avg_wait_times.c.avg_wait
+                func.ceil(func.cast(avg_wait_times.c.avg_wait, db.Integer))
             ).join(
                 avg_wait_times, Restaurant.id == avg_wait_times.c.restaurant_id
             ).filter(
                 avg_wait_times.c.avg_wait <= max_wait
+            ).order_by(asc(avg_wait_times.c.avg_wait)
             ).all()
         else:
             restaurants_with_avg_wait = db.session.query(
