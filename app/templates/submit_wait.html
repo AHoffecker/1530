@@ -1,7 +1,7 @@
-{% extends "index.html" %}
+{% extends "index.html" %} 
 {% block content %}
   <div class="block my-background-secondary">
-    <h1 class="color-primary">Leave a Review for {{ restaurant_name }}</h1>
+    <h1 class="color-primary">Report a Wait Time</h1>
     <form method="POST">
       <label for="restaurant" class="color-primary">Select a Restaurant:</label><br />
       <select id="restaurant" name="restaurant">
@@ -13,13 +13,11 @@
           <option value="{{ r }}">{{ r }}</option>
         {% endfor %}
       </select><br /><br />
-      <label for="rating" class="color-primary">Rating (1-5):</label><br />
-      <input type="number" id="rating" name="rating" min="1" max="5" /><br /><br />
 
-      <label for="review" class="color-primary">Your Review:</label><br />
-      <textarea id="review" name="review" rows="5" cols="60"></textarea><br /><br />
+      <label for="waitTime" class="color-primary">Wait Time (Minutes):</label><br />
+      <input type="number" id="waitTime" name="waitTime" /><br /><br />
 
-      <input type="submit" value="Submit Review" class="button color-primary" />
+      <input type="submit" value="Submit Wait Time" class="button color-primary" />
     </form>
   </div>
 {% endblock %}

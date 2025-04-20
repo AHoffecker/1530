@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import datetime
 from models import db, Restaurant, Review, WaitTime
@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Configure the database URI
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models.db'  # Adjust for your DB URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Optional, to suppress a warning
-
+app.secret_key = 'our_secret_key'
 # Bind the db to the app
 db.init_app(app)
 
@@ -54,16 +54,16 @@ def add_wait(r_id, lengthOfWait):
     db.session.add(waitTime)
     db.session.commit()
 
-# def add_review(r_id, rating, writtenReview):
-#     review = Review(
-#         restaurant_id = r_id,
-#         rating = rating,
-#         writtenReview = writtenReview,
-#         timestamp = datetime.datetime.now().time(),
-#         restaurant = None # What does this do?
-#     )
-#     db.session.add(review)
-#     db.session.commit()
+def add_review(r_id, rating, writtenReview):
+    review = Review(
+        restaurant_id = r_id,
+        rating = rating,
+        writtenReview = writtenReview,
+        timestamp = datetime.datetime.now().time(),
+        restaurant = None # What does this do?
+    )
+    db.session.add(review)
+    db.session.commit()
 
 def add_fake_wait_data(): # Adds random fake data
     for _ in range(5):
@@ -129,8 +129,37 @@ def search_results():
     else:
         return render_template('search_results.html', error="Please enter a valid maximum wait time.")
 
-@app.route('/review')
-def review():
+@app.route('/submit_wait', methods=['GET', 'POST'])
+def submit_wait():
+    if request.method == 'POST':
+        restaurant_name = request.form['restaurant']
+        wait_time = request.form.get('waitTime', type=int)
+
+        restaurant = Restaurant.query.filter_by(name=restaurant_name).first()
+        if restaurant and wait_time is not None:
+            add_wait(restaurant.id, wait_time)
+            session['review_restaurant_id'] = restaurant.id
+            return redirect(url_for('ask_for_review'))
+
+    restaurants = Restaurant.query.order_by(Restaurant.name).all()
+    return render_template('submit_wait.html', restaurants=restaurants)
+
+@app.route('/ask_for_review', methods=['GET'])
+def ask_for_review():
+    return render_template('ask_for_review.html')
+
+@app.route('/submit_review', methods=['GET', 'POST'])
+def submit_review():
+    if request.method == 'POST':
+        restaurant_id = session.get('review_restaurant_id')
+        if restaurant_id:
+            rating = request.form.get('rating', type=int)
+            writtenReview = request.form.get('review')
+            if rating and writtenReview:
+                add_review(restaurant_id, rating, writtenReview)
+        session.pop('review_restaurant_id', None)
+        return redirect(url_for('home'))
+
     return render_template('review.html')
 
 if __name__ == '__main__':

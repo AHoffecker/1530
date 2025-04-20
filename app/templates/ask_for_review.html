@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block content %}
+  <div class="block my-background-secondary">
+    <h2 class="color-primary">Thanks for reporting your wait time!</h2>
+    <a href="{{ url_for('submit_review') }}">
+      <button class="button color-primary">Would you like to leave a review?</button>
+    </a>
+  </div>
+{% endblock %}
