@@ -61,13 +61,16 @@ def search():
 @app.route('/search_results', methods=['POST'])
 def search_results():
     time = request.form.get('time', type=str)
-    max_wait = 0
+    max_wait = ''
+    print(time)
     try:
         max_wait = int(time)
     except:
-        max_wait = ''
+        if time == "any":
+            max_wait = "any"
 
-    if max_wait is not None or max_wait != '':
+
+    if max_wait is not None:
         # Calculate the average wait time for each restaurant
         avg_wait_times = db.session.query(
             WaitTime.restaurant_id,
@@ -75,7 +78,7 @@ def search_results():
         ).group_by(WaitTime.restaurant_id).subquery()
 
         # Join Restaurant and the average wait times to get restaurant names
-        if max_wait == "any":
+        if max_wait != "any":
             restaurants_with_avg_wait = db.session.query(
                 Restaurant.name,
                 avg_wait_times.c.avg_wait
