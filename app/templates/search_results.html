@@ -20,7 +20,7 @@
                 <option value="30">30 minutes</option>
                 <option value="45">45 minutes</option>
                 <option value="60">60 minutes</option>
-                <option value="all">Any</option>
+                <option value="any">Any</option>
             </select></br></br>
             <button type="submit" class='button color-primary'>Search</button>
     </form></br></br>
@@ -29,12 +29,14 @@
 
     {% if error %}
         <p style="color: red;">{{ error }}</p>
-    {% elif restaurants %}
+    {% elif max_wait == '' %}
+        <p>No restaurants found.</p>
+    {% elif restaurants == None %}
         <h1 class='color-primary'>Restaurants with an Average Wait Time 
-        {% if selected_time == 'all' %}
+        {% if max_wait == 'any' %}
             (Any):
         {% else %}
-            of {{ selected_time }} or less:
+            of {{ max_wait }} minutes or less:
         {% endif %}
         </h1>
         <ul>
