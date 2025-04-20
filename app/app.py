@@ -109,10 +109,10 @@ def search_results():
         else:
             restaurants_with_avg_wait = db.session.query(
                 Restaurant.name,
-                avg_wait_times.c.avg_wait
+                func.ceil(func.cast(avg_wait_times.c.avg_wait, db.Integer))
             ).join(
                 avg_wait_times, Restaurant.id == avg_wait_times.c.restaurant_id
-            )
+            ).order_by(asc(avg_wait_times.c.avg_wait))
 
         return render_template('search_results.html', max_wait=max_wait, restaurants=restaurants_with_avg_wait)
     else:
