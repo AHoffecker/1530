@@ -54,14 +54,16 @@ def add_wait(r_id, lengthOfWait):
     db.session.add(waitTime)
     db.session.commit()
 
+def add_fake_data(): # Adds random fake data
+    for _ in range(25):
+        id = random.randint(0,20)
+        wait = random.randint(0,100)
+        add_wait(id, wait)
+
 # Create tables if they do not exist (done once when the app starts up)
 with app.app_context():
     db.create_all()  # Creates the tables in the database if they do not exist
     add_restaurants()  # Add the list of restaurants to the database
-    # for _ in range(25): # Adds random fake data
-    #     id = random.randint(0,20)
-    #     wait = random.randint(0,100)
-    #     add_wait(id, wait)
 
 @app.route('/')
 def home():
