@@ -61,13 +61,11 @@ def search():
 @app.route('/search_results', methods=['POST'])
 def search_results():
     time = request.form.get('time', type=str)
-    print(f"time: \'{time}\'")
     max_wait = 0
     try:
         max_wait = int(time)
     except:
         max_wait = ''
-    print(f"max_wait: \'{max_wait}\'")
 
     if max_wait is not None or max_wait != '':
         # Calculate the average wait time for each restaurant
