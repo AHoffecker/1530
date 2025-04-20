@@ -54,8 +54,19 @@ def add_wait(r_id, lengthOfWait):
     db.session.add(waitTime)
     db.session.commit()
 
+# def add_review(r_id, rating, writtenReview):
+#     review = Review(
+#         restaurant_id = r_id,
+#         rating = rating,
+#         writtenReview = writtenReview,
+#         timestamp = datetime.datetime.now().time(),
+#         restaurant = None # What does this do?
+#     )
+#     db.session.add(review)
+#     db.session.commit()
+
 def add_fake_wait_data(): # Adds random fake data
-    for _ in range(25):
+    for _ in range(5):
         id = random.randint(0,20)
         wait = random.randint(0,100)
         add_wait(id, wait)
