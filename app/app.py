@@ -54,7 +54,7 @@ def add_wait(r_id, lengthOfWait):
     db.session.add(waitTime)
     db.session.commit()
 
-def add_fake_data(): # Adds random fake data
+def add_fake_wait_data(): # Adds random fake data
     for _ in range(25):
         id = random.randint(0,20)
         wait = random.randint(0,100)
