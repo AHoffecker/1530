@@ -2,10 +2,24 @@
 
 <h2 class='my-background-secondary' style = 'color: #cdb87d'>Pitt Dining Locations</h2>
 <div id="map"></div>
+<script id="avg-data" type="application/json">
+  {{ avg_waits | default([]) | tojson }}
+</script>
+
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
 
 <script>
+  const avgWaitsArr = JSON.parse(
+    document.getElementById('avg-data').textContent
+  );
+
+  const avgMap = avgWaitsArr.reduce((m, [name, avg]) => {
+    m[name] = avg;
+    return m;
+  }, {});
+
+  let activeInfoWindow = null;
   function initMap() {
     const center = { lat: 40.44273369636497, lng: -79.95804594870202 };
 
@@ -15,10 +29,11 @@
       center: center,
     });
 
+
     const locations = [
       {
-        lat: 40.443752790425826,
-        lng: -79.96208623482627,
+        lat: 40.44350291260618, 
+        lng: -79.9621683669033,
         title: "Auntie Anne's",
       },
       {
@@ -59,8 +74,7 @@
         title: "Campus Coffee & Tea Co - Towers",
       },
       {
-        lat: 40.44412519971398,
-        lng: -79.95333746952493,
+        lat: 40.44464451296268, lng: -79.95324724748262,
         title: "Cathedral Sushi",
       },
       { lat: 40.44376352830237, lng: -79.96207194441983, title: "Chick-fil-A" },
@@ -82,8 +96,8 @@
         title: "Forbes Street Market",
       },
       {
-        lat: 40.44343116587647,
-        lng: -79.95481804891322,
+        lat: 40.44352998137158, 
+        lng :-79.95451526178553,
         title: "Ft. Pitt Subs",
       },
       {
@@ -91,7 +105,7 @@
         lng: -79.96172878471405,
         title: "Panera Bread",
       },
-      { lat: 40.44343116587647, lng: -79.95481804891322, title: "PA Taco Co." },
+      { lat: 40.44372390302962, lng: -79.95482773914316, title: "PA Taco Co." },
       {
         lat: 40.4458111817928,
         lng: -79.96254602698215,
@@ -129,26 +143,87 @@
         lng: -79.95646612755588,
         title: "The Market at Towers",
       },
-      { lat: 40.44412519971398, lng: -79.95333746952493, title: "The Roost" },
-      { lat: 40.44343116587647, lng: -79.95481804891322, title: "True Burger" },
-      { lat: 40.44343116587647, lng: -79.95481804891322, title: "Wicked Pie" },
+      { lat: 40.444265860072214, lng: -79.95367438926804, title: "The Roost" },
+      { lat: 40.4431717351455, lng: -79.95495514406826, title: "True Burger" },
+      { lat: 40.44353916713945, lng:-79.95509193673125, title: "Wicked Pie" },
     ];
 
-    locations.forEach((loc) => {
+    locations.forEach(loc => {
+      const avg = avgMap[loc.title];
+
+      // build a circle symbol icon
+      const icon = {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: avg ? '#76d6c6' : '#ccc',   // grey if no data
+        fillOpacity: 0.7,
+        strokeColor: '#cdb87d',
+        strokeWeight: 2,
+        // scale: base size + extra per minute
+        scale: avg ? (8 + avg * 1.2) : 8
+      };
+
+      // create marker with that icon and a label
       const marker = new google.maps.Marker({
         position: { lat: loc.lat, lng: loc.lng },
-        map: map,
-        title: loc.title,
-      });
-
-      const infoWindow = new google.maps.InfoWindow({
-        content: `<div><strong>${loc.title}</strong></div>`,
+        map,
+        icon,
+        label: {
+          text: avg !== undefined ? String(avg) : '?',
+          color: '#000',
+          fontSize: '12px',
+          fontWeight: 'bold'
+        },
+        title: loc.title
       });
 
       marker.addListener("click", () => {
-        infoWindow.open(map, marker);
+        if (activeInfoWindow) activeInfoWindow.close();
+
+        // header
+        let html = `
+          <div style="color:black;font-weight:bold;">
+            ${loc.title}
+          </div>
+        `;
+
+        // find avg by name
+        const rec = avgWaitsArr.find(([name,avg]) => name === loc.title);
+        if (rec) {
+          html += `<div style="color:black">Average wait: ${rec[1]} minutes</div>`;
+        } else {
+          html += `<div style="color:black"><em>No wait reports yet</em></div>`;
+        }
+
+        const iw = new google.maps.InfoWindow({ content: html });
+        iw.open(map, marker);
+        activeInfoWindow = iw;
       });
     });
   }
 </script>
+
+<style>
+  .wait-list strong {
+    color: #c7a64b;
+  }
+
+  .wait-list li {
+    color: black;
+  } 
+</style>
+
+<h2 class="my-background-secondary" style="color:#cdb87d">
+  Average Wait Times by Location
+</h2>
+<ul class="wait-list">
+  {% for name, avg in avg_waits %}
+    <li>
+      <strong>{{ name }}</strong> — {{ avg|round(1) }} minutes
+    </li>
+  {% else %}
+    <li>No waits reported yet.</li>
+  {% endfor %}
+</ul>
+
+
 {% endblock %}

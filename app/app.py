@@ -1,15 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, abort
 import os
-import datetime
-from models import db, Restaurant, Review, WaitTime
+from datetime import datetime, timezone, timedelta
+from app.models import db, Restaurant, Review, WaitTime
 from sqlalchemy import func, asc
 import random
 
 # Initialize Flask app
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 
 # Configure the database URI
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models.db'  # Adjust for your DB URI
+os.makedirs(app.instance_path, exist_ok=True)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    "sqlite:///" + os.path.join(app.instance_path, "models.db")
+)
+
+print("→ SQLite DB path is:", 
+      os.path.abspath(os.path.join(app.instance_path, "models.db")))
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Optional, to suppress a warning
 app.secret_key = 'our_secret_key'
 # Bind the db to the app
@@ -44,23 +52,29 @@ def add_restaurants():
     db.session.commit()
 
 def add_wait(r_id, lengthOfWait):
+    now = datetime.now(timezone.utc)
+    order_time = (now - timedelta(seconds=lengthOfWait * 60))
+
     waitTime = WaitTime(
-        restaurant_id = r_id,
-        lengthOfWait = lengthOfWait,
-        orderTime = (datetime.datetime.now()-datetime.timedelta(seconds = lengthOfWait*60)).time(),
-        receivedTime = datetime.datetime.now().time(),
-        timestamp = datetime.datetime.now().time()
+        restaurant_id=r_id,
+        lengthOfWait=lengthOfWait,
+        orderTime=order_time,
+        receivedTime=now,
+        timestamp=now
     )
     db.session.add(waitTime)
     db.session.commit()
 
+
 def add_review(r_id, rating, writtenReview):
+    now = datetime.now(timezone.utc)
+
     review = Review(
-        restaurant_id = r_id,
-        rating = rating,
-        writtenReview = writtenReview,
-        timestamp = datetime.datetime.now().time(),
-        restaurant = None # What does this do?
+        restaurant_id=r_id,
+        rating=rating,
+        writtenReview=writtenReview,
+        timestamp=now,
+       
     )
     db.session.add(review)
     db.session.commit()
@@ -82,7 +96,28 @@ def home():
 
 @app.route('/map_page')
 def map_page():
-    return render_template('map.html', google_maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"))
+    api_key = os.getenv("GOOGLE_MAPS_API_KEY")
+
+    raw = (
+        db.session.query(
+            Restaurant.name,
+            func.avg(WaitTime.lengthOfWait)
+        )
+        .join(WaitTime, Restaurant.id == WaitTime.restaurant_id)
+        .group_by(Restaurant.id)
+        .all()
+    )
+
+    avg_waits = [
+        [ name, round(avg_wait, 1) ]
+        for name, avg_wait in raw
+    ]
+
+    return render_template(
+        'map.html',
+        google_maps_api_key=api_key,
+        avg_waits=avg_waits
+    )
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -151,16 +186,24 @@ def ask_for_review():
 @app.route('/submit_review', methods=['GET', 'POST'])
 def submit_review():
     if request.method == 'POST':
-        restaurant_id = session.get('review_restaurant_id')
-        if restaurant_id:
-            rating = request.form.get('rating', type=int)
-            writtenReview = request.form.get('review')
-            if rating and writtenReview:
-                add_review(restaurant_id, rating, writtenReview)
-        session.pop('review_restaurant_id', None)
-        return redirect(url_for('home'))
+        # pull the restaurant_id straight from the dropdown
+        restaurant_id = request.form.get('restaurant_id', type=int)
+        rating        = request.form.get('rating',        type=int)
+        writtenReview = request.form.get('review',               )
 
-    return render_template('review.html')
+        if restaurant_id and rating and writtenReview:
+            add_review(restaurant_id, rating, writtenReview)
+            return redirect(url_for('home'))
+        else:
+            # you could flash an error here if any field is missing
+            abort(400, "All fields are required.")
+
+    # GET → render the form with a live list of restaurants
+    restaurants = Restaurant.query.order_by(Restaurant.name).all()
+    return render_template(
+        'review.html',
+        restaurants=restaurants
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

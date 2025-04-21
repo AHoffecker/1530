@@ -1,23 +1,35 @@
 {% extends "index.html" %}
+
 {% block content %}
   <div class="block my-background-secondary">
-    <h1 class="color-primary">Leave a Review for {{ restaurant_name }}</h1>
+    <h1 class="color-primary">Leave a Review</h1>
     <form method="POST">
-      <label for="restaurant" class="color-primary">Select a Restaurant:</label><br />
-      <select id="restaurant" name="restaurant">
-        <option value="">--Choose a restaurant--</option>
-        {% for r in ["Auntie Anne's", "Burrito Bowl", "Cafe 1923", "Campus Coffee & Tea Co - Sutherland", 
-                     "Campus Coffee & Tea Co - Towers", "Cathedral Sushi", "Chick-fil-A", "CrEATe", 
-                     "Ft. Pitt Subs", "PA Taco Co.", "Pom & Honey", "Shake Smart", "Steel City Kitchen", 
-                     "The Delicatessen", "The Eatery", "The Perch", "The Roost", "True Burger", "Wicked Pie"] %}
-          <option value="{{ r }}">{{ r }}</option>
+      <label for="restaurant_id" class="color-primary">Select a Restaurant:</label><br />
+      <select id="restaurant_id" name="restaurant_id" required>
+        <option value="" disabled selected>--Choose one--</option>
+        {% for r in restaurants %}
+          <option value="{{ r.id }}">{{ r.name }}</option>
         {% endfor %}
-      </select><br /><br />
+      </select>
+      <br /><br />
+
       <label for="rating" class="color-primary">Rating (1-5):</label><br />
-      <input type="number" id="rating" name="rating" min="1" max="5" /><br /><br />
+      <input
+        type="number"
+        id="rating"
+        name="rating"
+        min="1" max="5"
+        required
+      /><br /><br />
 
       <label for="review" class="color-primary">Your Review:</label><br />
-      <textarea id="review" name="review" rows="5" cols="60"></textarea><br /><br />
+      <textarea
+        id="review"
+        name="review"
+        rows="5" cols="60"
+        required
+      ></textarea>
+      <br /><br />
 
       <input type="submit" value="Submit Review" class="button color-primary" />
     </form>

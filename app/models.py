@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Initialize db object
 db = SQLAlchemy()
@@ -22,13 +22,13 @@ class Review(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
     rating = db.Column(db.SmallInteger, nullable=False)  # corrected
     writtenReview = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     restaurant = db.relationship('Restaurant', backref=db.backref('reviews', lazy=True))
 
 class WaitTime(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
     lengthOfWait = db.Column(db.Integer, nullable=False)
-    orderTime = db.Column(db.Time, default=datetime.utcnow)  # corrected
-    receivedTime = db.Column(db.Time, default=datetime.utcnow)  # corrected
-    timestamp = db.Column(db.Time, default=datetime.utcnow)  # corrected
+    orderTime = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   # ⬅️ FIXED
+    receivedTime = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc)) # ⬅️ FIXED
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))    # ⬅️ FIXED
