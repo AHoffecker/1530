@@ -6,7 +6,7 @@
 </head>
 <div class = "block my-background-secondary">
     <h1 class='color-primary'>Search Restaurants by Wait Time</h1>
-
+    <!-- search wait time form -->
     <form method="POST" action="/search_results">
 
         <label for="waitTime" class='color-primary'>Select a Wait Time:</br>
@@ -25,12 +25,15 @@
             <button type="submit" class='button color-primary'>Search</button>
     </form></br></br>
 
+    <!-- returns wait times -->
     <h1 class='color-primary'>Search Results</h1>
-
+    <!-- returns error message -->
     {% if error %}
         <p style="color: red;">{{ error }}</p>
+    <!-- returns a "No restaurants found" message -->
     {% elif max_wait == '' %}
         <p>No restaurants found.</p>
+    <!-- returns the average wait time for all restaurants with an average wait time less that the one that was requested -->
     {% elif restaurants %}
         <h1 class='color-primary'>Restaurants with an Average Wait Time 
         {% if max_wait == 'any' %}
