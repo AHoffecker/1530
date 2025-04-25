@@ -51,6 +51,7 @@ def add_restaurants():
 
     db.session.commit()
 
+# record a wait time for a specific restaurant
 def add_wait(r_id, lengthOfWait):
     now = datetime.now(timezone.utc)
     order_time = (now - timedelta(seconds=lengthOfWait * 60))
@@ -119,10 +120,12 @@ def map_page():
         avg_waits=avg_waits
     )
 
+# initial page for searching wait times
 @app.route('/search', methods=['GET'])
 def search():
     return render_template('search.html')
 
+# page for returning the results of a query for a specific wait time
 @app.route('/search_results', methods=['POST'])
 def search_results():
     time = request.form.get('time', type=str) # get time from search or search_results form
